@@ -98,7 +98,20 @@ function M.setup(capabilities)
   }
   
   -- サーバー設定とアクティベーション
+  local on_attach = function(client, bufnr)
+    require("nvim-navic").attach(client, bufnr)
+    -- 共通のキーマップ設定
+    M.setup_keymaps()
+  end
+
   for name, config in pairs(servers) do
+    local original_on_attach = config.on_attach
+    config.on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+      if original_on_attach then
+        original_on_attach(client, bufnr)
+      end
+    end
     vim.lsp.start(vim.tbl_extend("force", { name = name }, config))
   end
   

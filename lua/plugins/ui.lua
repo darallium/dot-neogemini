@@ -14,6 +14,11 @@ return {
       transparent_background = false,
       show_end_of_buffer = false,
       term_colors = false,
+      dim_inactive = {
+        enabled = false,
+        shade = "dark",
+        percentage = 0.15,
+      },
       integrations = {
         telescope = true,
         treesitter = true,
@@ -24,9 +29,7 @@ return {
       },
     },
     config = function(_, opts)
-      ---@type CatppuccinOptions
-      local catppuccin_opts = opts
-      require("catppuccin").setup(catppuccin_opts)
+      require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin")
     end,
   },
@@ -35,7 +38,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
     opts = {
       options = {
         theme = "catppuccin",
@@ -55,9 +58,16 @@ return {
               readonly = '',
               unnamed = '[No Name]',
             }
-          }
+          },
+          {
+            "navic",
+            color = { fg = "#999999" },
+            cond = function()
+              return require("nvim-navic").is_available()
+            end,
+          },
         },
-        lualine_x = {'encoding', 'fileformat', 'filetype', 'lsp_client'},
+        lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
         lualine_z = {'location'}
       },
@@ -70,6 +80,53 @@ return {
         lualine_z = {}
       },
     },
+  },
+
+  -- Navic
+  {
+    "SmiteshP/nvim-navic",
+    dependencies = { "neovim/nvim-lspconfig" },
+    lazy = true,
+    init = function()
+      vim.g.navic_silence = true
+    end,
+    opts = function()
+      return {
+        icons = {
+          File = "󰈔",
+          Module = "󰆩",
+          Namespace = "󰅩",
+          Package = "󰏖",
+          Class = "󰠱",
+          Method = "󰆧",
+          Property = "󰜢",
+          Field = "󰜢",
+          Constructor = "",
+          Enum = " enum",
+          Interface = "󰜖",
+          Function = "󰊕",
+          Variable = "󰫧",
+          Constant = "󰏿",
+          String = "SC",
+          Number = "󰎠",
+          Boolean = "󰨙",
+          Array = "󰅪",
+          Object = "󰅫",
+          Key = " key",
+          Null = " null",
+          EnumMember = "󰭦",
+          Struct = "󰙅",
+          Event = "󰪄",
+          Operator = "󰭡",
+          TypeParameter = "󰊄",
+        },
+        highlight = true,
+        separator = " > ",
+        depth_limit = 0,
+        icons_enabled = true,
+        clickable = true,
+      }
+    end,
   },
   
   -- 通知
@@ -97,9 +154,7 @@ return {
       end,
     },
     config = function(_, opts)
-      ---@type NotifyOptions
-      local notify_opts = opts
-      require("notify").setup(notify_opts)
+      require("notify").setup(opts)
       vim.notify = require("notify")
     end,
   },
@@ -345,5 +400,96 @@ return {
         "json",
       },
     },
+  },
+
+  -- Noice.nvim
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      cmdline = {
+        view = "cmdline_popup",
+      },
+      messages = {
+        view = "popup",
+      },
+      popupmenu = {
+        enabled = false,
+      },
+      presets = {
+        bottom_search = true,
+        command_palette = true,
+        long_message_to_split = true,
+        inc_rename = false,
+        lsp_doc_border = false,
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+  },
+
+  -- Which-key.nvim
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {
+      plugins = {
+        marks = true,
+        registers = true,
+        spelling = true,
+        presets = {
+          operators = false,
+          motions = false,
+          text_objects = false,
+          windows = true,
+          nav = true,
+          z = true,
+          g = true,
+        },
+      },
+      icons = {
+        breadcrumb = "»",
+        separator = "➜",
+        group = "+",
+      },
+      popup_mappings = {
+        scroll_down = "<c-d>",
+        scroll_up = "<c-u>",
+      },
+      window = {
+        border = "rounded",
+        position = "bottom",
+        padding = { 2, 2, 2, 2 },
+        winhighlight = {"Normal:Normal", "FloatBorder:FloatBorder"},
+      },
+      layout = {
+        height = { min = 4, max = 25 },
+        width = { min = 20, max = 50 },
+        spacing = 3,
+        align = "left",
+      },
+      hidden = {"<silent>", "<cmd>", "<Plug>", "<CR>", "call", "lua", "^:", "^ "},
+      show_help = true,
+      triggers = "auto",
+      triggers_blacklist = {
+        i = {"j", "k"},
+        v = {"j", "k"},
+      },
+    },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.register {
+        mode = "n",
+        ["<leader>"] = { name = "Leader" },
+        ["<localleader>"] = { name = "Local Leader" },
+      }
+    end,
   },
 }
