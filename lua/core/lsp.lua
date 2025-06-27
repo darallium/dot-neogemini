@@ -99,8 +99,7 @@ function M.setup(capabilities)
   
   -- サーバー設定とアクティベーション
   for name, config in pairs(servers) do
-    vim.lsp.config(name, config)
-    vim.lsp.enable(name)
+    vim.lsp.start(vim.tbl_extend("force", { name = name }, config))
   end
   
   -- 共通のキーマップ設定

@@ -47,8 +47,10 @@ return {
     "saecki/crates.nvim",
     ft = { "rust", "toml" },
     config = function(_, opts)
+      ---@type CratesOptions
+      local crates_opts = opts
       local crates = require('crates')
-      crates.setup(opts)
+      crates.setup(crates_opts)
       vim.keymap.set("n", "<leader>cs", function() require('crates').show() end, { desc = "Show Crates" })
     end,
   },

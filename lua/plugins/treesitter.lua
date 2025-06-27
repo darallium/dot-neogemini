@@ -11,7 +11,8 @@ return {
     config = function ()
       local configs = require("nvim-treesitter.configs")
 
-      configs.setup({
+      ---@type TSConfig
+      local ts_config = {
         sync_install = false,
         highlight = {
           enable = true,
@@ -24,7 +25,8 @@ return {
         autotag = {
           enable = true,
         }
-      })
+      }
+      configs.setup(ts_config)
     end,
   },
 }

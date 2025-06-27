@@ -1,5 +1,14 @@
-
+-- AI-assisted development plugins
 return {
+  -- Tabby
+  {
+    "TabbyML/vim-tabby",
+    event = "InsertEnter",
+    config = function()
+      vim.g.tabby_keybinding_accept = "<Tab>"
+    end,
+  },
+  -- Copilot
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
