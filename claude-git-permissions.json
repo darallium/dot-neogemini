@@ -1,0 +1,247 @@
+{
+  "claude_git_permissions": {
+    "version": "1.0",
+    "description": "CLAUDE Code Git execution permissions for safe Git operations",
+    "categories": {
+      "SAFE": {
+        "description": "Git commands that are safe for read-only operations and basic development",
+        "auto_allow": true,
+        "commands": [
+          "git help", "git version", "git --version",
+          "git status", "git log", "git show", "git diff", "git blame", "git annotate",
+          "git ls-files", "git ls-tree", "git ls-remote", "git show-ref", "git show-branch",
+          "git describe", "git name-rev", "git rev-parse", "git rev-list",
+          "git cat-file", "git show-index", "git verify-pack", "git count-objects",
+          "git for-each-ref", "git get-tar-commit-id", "git var", "git whatchanged",
+          "git grep", "git cherry", "git merge-base", "git shortlog",
+          "git branch --list", "git branch -v", "git branch -a", "git branch -r",
+          "git tag --list", "git tag -l", "git remote -v", "git remote show",
+          "git config --list", "git config --get", "git config --get-all",
+          "git reflog show", "git reflog list", "git reflog exists",
+          "git fsck", "git check-ref-format", "git check-attr", "git check-ignore",
+          "git archive", "git bundle list-heads", "git bundle verify",
+          "git bisect log", "git bisect visualize", "git bisect view",
+          "git stash list", "git stash show", "git worktree list",
+          "git submodule status", "git submodule summary", "git notes show",
+          "git bugreport", "git diagnose", "git maintenance run --task=gc",
+          "git add --dry-run", "git add -n", "git commit --dry-run",
+          "git push --dry-run", "git push -n", "git clean --dry-run", "git clean -n",
+          "git merge --dry-run", "git rebase --dry-run", "git gc --dry-run",
+          "git prune --dry-run", "git prune -n"
+        ]
+      },
+      "DEVELOPMENT": {
+        "description": "Git commands for normal development workflow requiring confirmation",
+        "auto_allow": false,
+        "require_confirmation": true,
+        "commands": [
+          "git add", "git commit", "git commit -m", "git commit --amend",
+          "git checkout", "git switch", "git restore", "git mv", "git cp",
+          "git branch", "git tag", "git merge", "git pull", "git fetch",
+          "git push", "git stash", "git stash push", "git stash pop", "git stash apply",
+          "git cherry-pick", "git revert", "git rebase", "git reset --soft", "git reset --mixed",
+          "git clone", "git init", "git remote add", "git remote set-url",
+          "git config --add", "git config --set", "git config --unset",
+          "git submodule add", "git submodule update", "git submodule init",
+          "git worktree add", "git notes add", "git notes edit", "git notes remove",
+          "git apply", "git am", "git format-patch", "git send-email",
+          "git bisect start", "git bisect good", "git bisect bad", "git bisect reset",
+          "git rerere", "git maintenance start", "git maintenance stop",
+          "git gc", "git repack", "git pack-refs", "git update-ref", "git symbolic-ref"
+        ]
+      },
+      "RESTRICTED": {
+        "description": "Potentially dangerous Git operations requiring explicit approval",
+        "auto_allow": false,
+        "require_explicit_approval": true,
+        "commands": [
+          "git clean", "git clean -f", "git clean -fd", "git clean -fx",
+          "git rm", "git rm -f", "git rm -r", "git rm --cached",
+          "git reset --hard", "git reset --merge", "git reset --keep",
+          "git branch -d", "git branch -D", "git branch -m", "git branch -M",
+          "git branch -f", "git tag -d", "git tag -f",
+          "git push --force", "git push -f", "git push --force-with-lease",
+          "git push --delete", "git push -d", "git push --mirror",
+          "git remote remove", "git remote rm", "git remote prune",
+          "git reflog delete", "git reflog expire", "git reflog drop",
+          "git prune", "git prune-packed", "git gc --aggressive", "git gc --prune=now",
+          "git filter-branch", "git replace", "git update-index --assume-unchanged",
+          "git update-index --skip-worktree", "git update-index --really-refresh",
+          "git checkout-index --force", "git read-tree --reset",
+          "git submodule deinit", "git submodule foreach", "git worktree remove",
+          "git worktree prune", "git config --system", "git config --global",
+          "git config --edit", "git maintenance run --task=incremental-repack",
+          "git maintenance run --task=commit-graph", "git maintenance run --task=prefetch"
+        ]
+      },
+      "FORBIDDEN": {
+        "description": "Extremely dangerous Git operations that should never be executed automatically",
+        "auto_allow": false,
+        "block": true,
+        "commands": [
+          "git clean -ffx", "git clean -ffdx", "git clean -ffxd",
+          "git rm -rf *", "git rm -rf .", "git rm -rf /",
+          "git reset --hard HEAD~", "git reset --hard origin/master",
+          "git push --force-with-lease=master:", "git push --force origin master",
+          "git push --delete origin master", "git push --mirror --force",
+          "git branch -D master", "git branch -D main", "git tag -d v*",
+          "git reflog expire --expire=now --all", "git reflog drop --all",
+          "git filter-branch --index-filter", "git filter-branch --tree-filter",
+          "git gc --prune=all", "git prune --expire=now",
+          "git config --global user.email", "git config --global user.name",
+          "git config --system core.hooksPath", "git config core.hooksPath",
+          "git submodule foreach --recursive git clean -ffxd",
+          "git submodule foreach --recursive git reset --hard",
+          "git worktree remove --force", "git daemon", "git daemon --export-all",
+          "git fast-import", "git fast-export", "git cvsserver", "git svn",
+          "git p4", "git archimport", "git cvsimport", "git quiltimport"
+        ]
+      }
+    },
+    "dangerous_patterns": {
+      "destructive_resets": [
+        "git reset --hard HEAD~[0-9]+",
+        "git reset --hard [^\\s]+",
+        "git reset --hard origin/.*"
+      ],
+      "forced_operations": [
+        "git push.*--force(?!-with-lease)",
+        "git push.*-f(?!-)",
+        "git clean.*-f.*-f",
+        "git branch.*-D.*master|main",
+        "git tag.*-f.*"
+      ],
+      "bulk_deletions": [
+        "git rm.*-rf.*\\*",
+        "git rm.*-rf.*\\.",
+        "git clean.*-fd.*",
+        "git reflog.*expire.*--all",
+        "git prune.*--expire=.*"
+      ],
+      "configuration_risks": [
+        "git config.*--global",
+        "git config.*--system",
+        "git config.*core\\.hooksPath",
+        "git config.*receive\\.",
+        "git config.*push\\."
+      ],
+      "history_rewriting": [
+        "git filter-branch.*",
+        "git rebase.*-i.*",
+        "git commit.*--amend.*HEAD~",
+        "git cherry-pick.*--continue.*"
+      ]
+    },
+    "safe_working_contexts": {
+      "repository_types": {
+        "allowed": [
+          "personal_projects",
+          "development_branches",
+          "feature_branches",
+          "local_experiments"
+        ],
+        "restricted": [
+          "main_branches",
+          "master_branches",
+          "release_branches",
+          "shared_repositories"
+        ],
+        "forbidden": [
+          "production_repositories",
+          "system_repositories",
+          "bare_repositories"
+        ]
+      },
+      "branch_protection": {
+        "protected_branches": [
+          "main", "master", "develop", "staging", "production",
+          "release/*", "hotfix/*"
+        ],
+        "safe_branches": [
+          "feature/*", "bugfix/*", "experimental/*", "test/*",
+          "personal/*", "draft/*"
+        ]
+      }
+    },
+    "command_modifiers": {
+      "safe_flags": [
+        "--dry-run", "-n", "--verbose", "-v", "--quiet", "-q",
+        "--show-current", "--list", "-l", "--porcelain", "--help",
+        "--version", "--no-pager", "--no-replace-objects"
+      ],
+      "dangerous_flags": [
+        "--force", "-f", "--hard", "--aggressive", "--prune=now",
+        "--expire=now", "--all", "--mirror", "--delete", "-D",
+        "--force-with-lease", "--force-if-includes"
+      ],
+      "restricted_flags": [
+        "--system", "--global", "--exec", "--upload-pack",
+        "--receive-pack", "--separate-git-dir", "--shared"
+      ]
+    },
+    "environment_restrictions": {
+      "safe_git_dirs": [
+        "$HOME/projects/*",
+        "$HOME/dev/*",
+        "$HOME/src/*",
+        "$HOME/work/*",
+        "/tmp/git-*",
+        "$PWD/.git"
+      ],
+      "restricted_git_dirs": [
+        "/",
+        "/usr/*",
+        "/etc/*",
+        "/var/*",
+        "/opt/*",
+        "/home/*/.config/*"
+      ],
+      "allowed_remotes": [
+        "origin",
+        "upstream",
+        "fork",
+        "personal"
+      ],
+      "restricted_remotes": [
+        "production",
+        "live",
+        "master-repo",
+        "main-repo"
+      ]
+    },
+    "recovery_procedures": {
+      "common_mistakes": {
+        "accidental_reset": {
+          "command": "git reset --hard HEAD~1",
+          "recovery": "git reflog show HEAD && git reset --hard HEAD@{1}"
+        },
+        "forced_push": {
+          "command": "git push --force origin master",
+          "recovery": "git push --force-with-lease origin master"
+        },
+        "deleted_branch": {
+          "command": "git branch -D feature-branch",
+          "recovery": "git reflog show --all | grep feature-branch && git checkout -b feature-branch <commit-hash>"
+        },
+        "clean_untracked": {
+          "command": "git clean -fd",
+          "recovery": "Check system trash/recycle bin - Git clean operations are not easily recoverable"
+        }
+      }
+    },
+    "integration_hooks": {
+      "pre_execution": [
+        "validate_repository_state",
+        "check_branch_protection",
+        "verify_remote_safety",
+        "confirm_destructive_operations"
+      ],
+      "post_execution": [
+        "log_git_operations",
+        "backup_important_refs",
+        "notify_dangerous_operations",
+        "update_safety_metrics"
+      ]
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "claude_code_permissions": {
+    "version": "1.0",
+    "description": "CLAUDE Code execution permissions for safe code development",
+    "categories": {
+      "SAFE": {
+        "description": "Commands that are safe to run in development contexts",
+        "auto_allow": true,
+        "commands": [
+          "ls", "cat", "head", "tail", "grep", "find", "which", "type", "file", "stat",
+          "echo", "printf", "date", "pwd", "whoami", "id", "env", "printenv",
+          "git", "make", "cmake", "ninja", "meson",
+          "gcc", "g++", "clang", "clang++", "rustc", "cargo", "go", "javac", "java",
+          "python", "python3", "node", "npm", "yarn", "pnpm", "pip", "pip3",
+          "rg", "fd", "bat", "lsd", "delta", "hexyl", "choose", "btm", "ya", "yazi", "zoxide",
+          "curl", "wget", "jq", "sed", "awk", "cut", "sort", "uniq", "wc", "tr",
+          "vim", "nvim", "nano", "emacs", "code", "subl",
+          "tar", "gzip", "gunzip", "zip", "unzip", "7z",
+          "diff", "patch", "tree", "htop", "top", "ps", "pgrep", "jobs",
+          "lua-language-server", "rust-analyzer", "clippy-driver", "rustfmt",
+          "ltex-cli", "ltex-ls", "gemini", "claude"
+        ]
+      },
+      "DEVELOPMENT": {
+        "description": "Development tools that require user confirmation",
+        "auto_allow": false,
+        "require_confirmation": true,
+        "commands": [
+          "ssh", "scp", "rsync", "git-remote",
+          "docker", "podman", "kubectl", "helm",
+          "systemctl --user", "journalctl",
+          "cargo-install-update", "topgrade", "rustup",
+          "npm install", "yarn add", "pip install",
+          "ln", "mkdir", "touch", "cp", "mv"
+        ]
+      },
+      "RESTRICTED": {
+        "description": "Potentially dangerous commands requiring explicit approval",
+        "auto_allow": false,
+        "require_explicit_approval": true,
+        "commands": [
+          "rm", "rmdir", "chmod", "chown", "chgrp",
+          "mount", "umount", "sudo", "su", "passwd",
+          "systemctl", "service", "init",
+          "kill", "killall", "pkill", "fuser",
+          "dd", "shred", "wipefs", "mkfs", "fdisk", "parted",
+          "reboot", "shutdown", "halt", "poweroff",
+          "crontab", "at", "batch"
+        ]
+      },
+      "FORBIDDEN": {
+        "description": "Commands that should never be executed automatically",
+        "auto_allow": false,
+        "block": true,
+        "commands": [
+          ":(){ :|:& };:", "rm -rf /", "rm -rf /*", "rm -rf ~/*",
+          "mkfs.ext4 /dev/sda", "dd if=/dev/zero of=/dev/sda",
+          "chmod -R 777 /", "chown -R root:root /",
+          "curl.*|sh", "wget.*|sh", "curl.*|bash", "wget.*|bash",
+          "format", "fdisk /dev/sda", "parted /dev/sda",
+          "aircrack-ng", "airodump-ng", "aireplay-ng"
+        ]
+      }
+    },
+    "patterns": {
+      "dangerous_redirections": [
+        "> /dev/sd[a-z]",
+        "> /dev/nvme[0-9]",
+        "| dd of=/dev/",
+        "rm -rf /",
+        "rm -rf /*"
+      ],
+      "network_commands": [
+        "curl.*|.*sh",
+        "wget.*|.*sh",
+        "ssh.*[;&|]",
+        "scp.*[;&|]"
+      ],
+      "system_modifications": [
+        "chmod.*777",
+        "chown.*root",
+        "systemctl.*--system",
+        "mount.*/"
+      ]
+    },
+    "user_directories": {
+      "safe_paths": [
+        "/home/darallium/dotfiles",
+        "/home/darallium/.config",
+        "/home/darallium/Projects",
+        "/home/darallium/Downloads",
+        "/tmp",
+        "/var/tmp"
+      ],
+      "restricted_paths": [
+        "/",
+        "/boot",
+        "/etc",
+        "/usr",
+        "/var",
+        "/sys",
+        "/proc",
+        "/dev"
+      ]
+    },
+    "environment_restrictions": {
+      "allowed_env_modifications": [
+        "PATH", "EDITOR", "PAGER", "LANG", "LC_*",
+        "CARGO_*", "RUSTUP_*", "NODE_*", "NPM_*"
+      ],
+      "forbidden_env_modifications": [
+        "LD_PRELOAD", "LD_LIBRARY_PATH", "SUDO_*", "SSH_*"
+      ]
+    }
+  }
+}
