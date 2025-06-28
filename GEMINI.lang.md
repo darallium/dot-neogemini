@@ -380,3 +380,19 @@ return {
   },
 }
 ```
+
+### YAML
+```lua
+-- plugins/yaml.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "yaml" },
+    opts = {
+      servers = {
+        yamlls = {},
+      },
+    },
+  },
+}
+```
