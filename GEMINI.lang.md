@@ -396,3 +396,19 @@ return {
   },
 }
 ```
+
+### JSON
+```lua
+-- plugins/json.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "json" },
+    opts = {
+      servers = {
+        jsonls = {},
+      },
+    },
+  },
+}
+```
