@@ -80,5 +80,25 @@ return {
         ft = { "markdown", "Avante" },
       },
     }
-  }
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "stevearc/dressing.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    opts = {
+      adapters = {
+        gemini = {
+          -- adapter = require("codecompanion.adapters.gemini"),
+          -- api_key = os.getenv("GEMINI_API_KEY"),
+        },
+      },
+    },
+    config = function(_, opts)
+      require("codecompanion").setup(opts)
+    end,
+  },
 }

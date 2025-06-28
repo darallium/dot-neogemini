@@ -38,8 +38,7 @@ return {
       { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
     },
     opts = function()
-      ---@class TelescopeOptions
-      local telescope_opts = {
+      return {
         defaults = {
           prompt_prefix = " ",
           selection_caret = " ",
@@ -68,7 +67,6 @@ return {
           },
         },
       }
-      return telescope_opts
     end,
   },
 }
