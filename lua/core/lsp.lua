@@ -121,6 +121,10 @@ function M.setup(capabilities)
     intelephense = {
       capabilities = capabilities,
     },
+
+    intelephense = {
+      capabilities = capabilities,
+    },
   }
   
   -- サーバー設定とアクティベーション

@@ -164,6 +164,11 @@ function M.setup(capabilities)
     intelephense = {
       capabilities = capabilities,
     },
+  }
+    
+    intelephense = {
+      capabilities = capabilities,
+    },
 
     jdtls = {
       capabilities = capabilities,
