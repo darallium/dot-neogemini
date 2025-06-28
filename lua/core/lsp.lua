@@ -78,7 +78,6 @@ function M.setup(capabilities)
     
     pyright = {
       capabilities = capabilities,
-      cmd = { "pyright-langserver", "--stdio" },
       settings = {
         python = {
           analysis = {
@@ -115,10 +114,6 @@ function M.setup(capabilities)
     },
 
     jdtls = {
-      capabilities = capabilities,
-    },
-
-    intelephense = {
       capabilities = capabilities,
     },
 
