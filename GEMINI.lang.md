@@ -412,3 +412,19 @@ return {
   },
 }
 ```
+
+### TOML
+```lua
+-- plugins/toml.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "toml" },
+    opts = {
+      servers = {
+        taplo = {},
+      },
+    },
+  },
+}
+```
