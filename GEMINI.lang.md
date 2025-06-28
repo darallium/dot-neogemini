@@ -202,3 +202,19 @@ return {
   },
 }
 ```
+
+### Ruby
+```lua
+-- plugins/ruby.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "ruby" },
+    opts = {
+      servers = {
+        solargraph = {},
+      },
+    },
+  },
+}
+```
