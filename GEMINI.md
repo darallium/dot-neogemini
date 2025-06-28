@@ -168,6 +168,32 @@ function M.setup(capabilities)
     jdtls = {
       capabilities = capabilities,
     },
+
+    ts_ls = {
+      capabilities = capabilities,
+      single_file_support = false,
+      root_markers = { "tsconfig.json", "package.json" },
+      settings = {
+        typescript = {
+          inlayHints = {
+            includeInlayParameterNameHints = 'all',
+            includeInlayVariableTypeHints = true,
+          },
+        },
+      },
+      on_attach = function(client, bufnr)
+        -- Node.js プロジェクト検出
+        local is_node_project = vim.fs.find('package.json', {
+          upward = true,
+          path = vim.api.nvim_buf_get_name(bufnr)
+        })[1] ~= nil
+        
+        if not is_node_project then
+          client.stop(true)
+          return
+        end
+      end,
+    },
   }
   
   -- サーバー設定とアクティベーション
