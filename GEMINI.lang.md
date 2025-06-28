@@ -440,6 +440,22 @@ return {
 }
 ```
 
+### Dart
+```lua
+-- plugins/dart.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "dart" },
+    opts = {
+      servers = {
+        dartls = {},
+      },
+    },
+  },
+}
+```
+
 ### Clojure
 ```lua
 -- plugins/clojure.lua
