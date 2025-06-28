@@ -117,6 +117,10 @@ function M.setup(capabilities)
     jdtls = {
       capabilities = capabilities,
     },
+
+    intelephense = {
+      capabilities = capabilities,
+    },
   }
   
   -- サーバー設定とアクティベーション

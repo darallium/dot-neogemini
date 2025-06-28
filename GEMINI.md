@@ -160,6 +160,10 @@ function M.setup(capabilities)
         "--function-arg-placeholders",
       },
     },
+    
+    intelephense = {
+      capabilities = capabilities,
+    },
   }
   
   -- サーバー設定とアクティベーション
