@@ -440,16 +440,24 @@ return {
 }
 ```
 
-### Dart
+### Elixir
 ```lua
--- plugins/dart.lua
+-- plugins/elixir.lua
 return {
   {
     "neovim/nvim-lspconfig",
-    ft = { "dart" },
+    ft = { "elixir" },
     opts = {
       servers = {
-        dartls = {},
+        elixir_ls = {
+          -- ElixirLS requires the cmd to be explicitly set.
+          -- You need to download and unzip ElixirLS, then provide the absolute path to `language_server.sh` (or `language_server.bat` on Windows).
+          -- Example: cmd = { "/path/to/elixir-ls/language_server.sh" },
+          cmd = { "YOUR_ABSOLUTE_PATH_TO_ELIXIR_LS/language_server.sh" },
+          root_dir = function(fname)
+            return vim.fs.find({'mix.exs'}, { upward = true, path = fname }):get(1)
+          end,
+        },
       },
     },
   },
@@ -468,6 +476,56 @@ return {
         clojure_lsp = {},
       },
     },
+  },
+}
+```
+
+### Dart/Flutter
+```lua
+-- plugins/flutter.lua
+return {
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = false, -- This plugin needs to be loaded early to set up the LSP
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- Optional: for better UI for prompts
+    },
+    ft = "dart", -- Only load for Dart files
+    config = function()
+      require("flutter-tools").setup {
+        lsp = {
+          -- This is where you can pass options to the Dart LSP server.
+          -- flutter-tools.nvim handles the setup of dartls, so you don't
+          -- need to configure it separately in nvim-lspconfig.
+          on_attach = function(client, bufnr)
+            -- You can add custom keymaps or other configurations here
+            -- that depend on the LSP client being attached.
+            require("core.lsp").setup_keymaps() -- Re-use core LSP keymaps
+            vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+          end,
+          capabilities = vim.lsp.protocol.make_client_capabilities(),
+          settings = {
+            -- Example: set line length for dart format
+            dart = {
+              lineLength = 120,
+            },
+          },
+        },
+        -- Other flutter-tools.nvim options can go here
+        widget_guides = {
+          enabled = true,
+        },
+        closing_tags = {
+          enabled = true,
+        },
+        dev_log = {
+          enabled = true,
+          open_cmd = "tabedit", -- Open in a new tab
+        },
+        -- Add more configurations as needed
+      }
+    end,
   },
 }
 ```
