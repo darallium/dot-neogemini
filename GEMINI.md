@@ -194,6 +194,21 @@ function M.setup(capabilities)
         end
       end,
     },
+
+    rust_analyzer = {
+      capabilities = capabilities,
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = { allFeatures = true },
+          checkOnSave = { command = "clippy" },
+          inlayHints = {
+            chainingHints = { enable = true },
+            parameterHints = { enable = true },
+            typeHints = { enable = true },
+          },
+        },
+      },
+    },
   }
   
   -- サーバー設定とアクティベーション
