@@ -100,6 +100,23 @@ function M.setup(capabilities)
         "--function-arg-placeholders",
       },
     },
+    
+    gopls = {
+      capabilities = capabilities,
+      settings = {
+        gopls = {
+          usePlaceholders = true,
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+        },
+      },
+    },
+
+    jdtls = {
+      capabilities = capabilities,
+    },
   }
   
   -- サーバー設定とアクティベーション
