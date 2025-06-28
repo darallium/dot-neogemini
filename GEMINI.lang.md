@@ -250,3 +250,53 @@ return {
   },
 }
 ```
+
+### HTML/CSS
+```lua
+-- plugins/html_css.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "html", "css" },
+    opts = {
+      servers = {
+        html = {},
+        cssls = {},
+      },
+    },
+  },
+}
+```
+
+### Lua
+```lua
+-- plugins/lua.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "lua" },
+    opts = {
+      servers = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+                library = {
+                  vim.env.VIMRUNTIME,
+                },
+              },
+              completion = {
+                callSnippet = "Replace",
+              },
+              diagnostics = {
+                globals = { "vim" },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+```

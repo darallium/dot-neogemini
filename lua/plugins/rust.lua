@@ -14,7 +14,7 @@ return {
             vim.cmd.RustLsp('debuggables')
           end, { desc = 'Rust debuggables', buffer = bufnr })
         end,
-        default_settings = {
+        settings = {
           ["rust-analyzer"] = {
             cargo = {
               allFeatures = true,
@@ -38,7 +38,7 @@ return {
         },
       },
     },
-    config = false,
+    config = true,
     
   },
   {
