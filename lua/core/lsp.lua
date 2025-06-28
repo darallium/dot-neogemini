@@ -7,13 +7,15 @@ local M = {}
 ---@field settings? table Server-specific settings
 ---@field root_markers? string[] Root directory markers
 ---@field single_file_support? boolean Single file support
+---@field cmd? string[] Command to start the LSP server
+---@field root_dir? fun(fname: string): string | nil Root directory detection function
 
 ---@param capabilities table LSP capabilities
 function M.setup(capabilities)
   if vim.fn.has('nvim-0.11') == 0 then return end
-  
+
   capabilities = capabilities or vim.lsp.protocol.make_client_capabilities()
-  
+
   ---@type table<string, LspServerConfig>
   local servers = {
     lua_ls = {
@@ -22,9 +24,7 @@ function M.setup(capabilities)
         Lua = {
           hint = { enable = true, paramName = 'All', paramType = true },
           completion = { callSnippet = 'Replace' },
-          diagnostics = {
-            globals = { 'vim', 'use', 'describe', 'it', 'before_each', 'after_each' }
-          },
+          diagnostics = { globals = {'vim'} },
           workspace = {
             library = vim.api.nvim_get_runtime_file("", true),
             checkThirdParty = false,
@@ -32,9 +32,7 @@ function M.setup(capabilities)
         },
       },
     },
-    
-    
-    
+
     ts_ls = {
       capabilities = capabilities,
       single_file_support = false,
@@ -53,14 +51,29 @@ function M.setup(capabilities)
           upward = true,
           path = vim.api.nvim_buf_get_name(bufnr)
         })[1] ~= nil
-        
+
         if not is_node_project then
           client.stop(true)
           return
         end
       end,
     },
-    
+
+    rust_analyzer = {
+      capabilities = capabilities,
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = { allFeatures = true },
+          checkOnSave = { command = "clippy" },
+          inlayHints = {
+            chainingHints = { enable = true },
+            parameterHints = { enable = true },
+            typeHints = { enable = true },
+          },
+        },
+      },
+    },
+
     pyright = {
       capabilities = capabilities,
       settings = {
@@ -72,7 +85,7 @@ function M.setup(capabilities)
         },
       },
     },
-    
+
     clangd = {
       capabilities = capabilities,
       cmd = {
@@ -84,56 +97,36 @@ function M.setup(capabilities)
         "--function-arg-placeholders",
       },
     },
-    
-    gopls = {
+
+    intelephense = {
       capabilities = capabilities,
-      settings = {
-        gopls = {
-          usePlaceholders = true,
-          analyses = {
-            unusedparams = true,
-          },
-          staticcheck = true,
-        },
-      },
     },
 
     jdtls = {
       capabilities = capabilities,
     },
 
-    intelephense = {
+    elixir_ls = {
       capabilities = capabilities,
+      -- ElixirLS requires the cmd to be explicitly set.
+      -- You need to download and unzip ElixirLS, then provide the absolute path to `language_server.sh` (or `language_server.bat` on Windows).
+      -- Example: cmd = { "/path/to/elixir-ls/language_server.sh" },
+      cmd = { "YOUR_ABSOLUTE_PATH_TO_ELIXIR_LS/language_server.sh" },
+      root_dir = function(fname)
+        return vim.fs.find({'mix.exs'}, { upward = true, path = fname }):get(1)
+      end,
     },
   }
-  
+
   -- サーバー設定とアクティベーション
-  local on_attach = function(client, bufnr)
-    require("nvim-navic").attach(client, bufnr)
-    -- 共通のキーマップ設定
-    M.setup_keymaps()
-  end
-
   for name, config in pairs(servers) do
-    -- Skip rust_analyzer as it's handled by rustaceanvim
-    if name == "rust_analyzer" then
-      goto continue
-    end
-
-    local original_on_attach = config.on_attach
-    config.on_attach = function(client, bufnr)
-      on_attach(client, bufnr)
-      if original_on_attach then
-        original_on_attach(client, bufnr)
-      end
-    end
     vim.lsp.config(name, config)
     vim.lsp.enable(name)
-    ::continue::
   end
-  
-  
-  
+
+  -- 共通のキーマップ設定
+  M.setup_keymaps()
+
   -- 診断設定
   M.setup_diagnostics()
 end
@@ -141,7 +134,7 @@ end
 ---@private
 function M.setup_keymaps()
   local key = vim.keymap.set
-  
+
   key('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
   key('n', 'gD', vim.lsp.buf.declaration, { desc = 'Go to declaration' })
   key('n', 'gi', vim.lsp.buf.implementation, { desc = 'Go to implementation' })

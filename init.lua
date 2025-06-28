@@ -16,7 +16,10 @@ require("core")
 
 --require("keymap")
 
-require("lazy").setup("plugins", {
+require("lazy").setup({
+  "plugins",
+  "plugins.startup_layout",
+}, {
   defaults = {
     lazy = true,
   },
