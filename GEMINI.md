@@ -209,6 +209,18 @@ function M.setup(capabilities)
         },
       },
     },
+
+    pyright = {
+      capabilities = capabilities,
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = "basic",
+            autoImportCompletions = true,
+          },
+        },
+      },
+    },
   }
     
     intelephense = {
