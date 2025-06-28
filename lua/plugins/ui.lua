@@ -1,4 +1,6 @@
 -- plugins/ui.lua
+local util = require("util")
+
 return {
   -- カラースキーム
   {
@@ -6,10 +8,10 @@ return {
     name = "catppuccin",
     priority = 1000,
     opts = {
-      flavour = "mocha",
+      flavour = "macchiato",
       background = {
         light = "latte",
-        dark = "mocha",
+        dark = "macchiato",
       },
       transparent_background = false,
       show_end_of_buffer = false,
@@ -67,7 +69,28 @@ return {
       },
       sections = {
         lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
+        lualine_b = {
+          {
+            'branch',
+            icon = util.icons.git.branch,
+          },
+          {
+            'diff',
+            symbols = {
+              added = util.icons.git.plus,
+              modified = util.icons.git.minus,
+              removed = util.icons.git.removed,
+            },
+          },
+          {
+            'diagnostics',
+            symbols = {
+              error = util.icons.diagnostics.Error,
+              warn = util.icons.diagnostics.Warn,
+              info = util.icons.diagnostics.Info,
+            },
+          },
+        },
         lualine_c = {
           {
             'filename',
@@ -117,9 +140,9 @@ return {
           preference = nil,
         },
         highlight = true,
-        separator = " > ",
+        separator = util.icons.ui.arrow_right,
         depth_limit = 5,
-        icons = require("util").icons.kind,
+        icons = util.icons.kind,
       }
     end,
     config = function(_, opts)
@@ -254,7 +277,7 @@ return {
       cmdline = {
         enable_keymaps = true,
         smart_history = true,
-        prompt = ': '
+        prompt = util.icons.ui.ArrowRight .. ' '
       },
       popup = {
         position = {
@@ -344,9 +367,10 @@ return {
         diagnostics = "nvim_lsp",
         diagnostics_indicator = function(count, level, diagnostics_dict, context)
           local s = " "
+          local icons = util.icons.diagnostics
           for e, n in pairs(diagnostics_dict) do
-            local sym = e == "error" and " " or (e == "warning" and " " or " ")
-            s = s .. n .. sym
+            local sym = icons[e] or ""
+            s = s .. n .. sym .. " "
           end
           return s
         end,
@@ -363,6 +387,12 @@ return {
         separator_style = "thin",
       }
     }
+  },
+
+  -- ファイルアイコン
+  {
+    "nvim-tree/nvim-web-devicons",
+    opts = {},
   },
 
   ---@class WhichKeySpellingOpts

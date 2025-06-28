@@ -10,6 +10,8 @@
 ---@field signs GitsignsSigns
 ---@field on_attach fun(buffer: integer)
 
+local util = require("util")
+
 -- plugins/git.lua
 return {
   -- Gitsigns
@@ -19,12 +21,12 @@ return {
     ---@type GitsignsPluginOpts
     opts = {
       signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-        untracked = { text = "▎" },
+        add = { text = util.icons.git.added },
+        change = { text = util.icons.git.modified },
+        delete = { text = util.icons.git.removed },
+        topdelete = { text = util.icons.git.removed },
+        changedelete = { text = util.icons.git.modified },
+        untracked = { text = util.icons.git.untracked },
       },
       on_attach = function(buffer)
         local gs = package.loaded.gitsigns
