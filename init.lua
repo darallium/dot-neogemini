@@ -32,5 +32,7 @@ require("lazy").setup("plugins", {
 })
 
 
+vim.notify('Neovim configuration loaded successfully!', vim.log.levels.INFO)
+
 return 'hello'
 

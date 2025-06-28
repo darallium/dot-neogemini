@@ -750,6 +750,8 @@ end
 2. **プラグイン更新**: `:Lazy sync`
 3. **LSP確認**: `:LspInfo` でサーバー状態確認
 4. **設定リロード**: `:source $MYVIMRC`
+5. **エラー検証**: `NVIM_APPNAME=neovim/darallium/gemini_pl nvim --headless +"Lazy! sync" +qa` を実行してエラーを検証
+6. **チェックヘルス**: `nvim --headless +"checkhealth" +"set buftype=" +"w! check_health.log" +"qa! " && cat check_health.log && rm check_healthlog`を実行して検証
 
 ### デバッグ方法
 ```lua

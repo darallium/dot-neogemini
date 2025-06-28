@@ -38,7 +38,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       options = {
         theme = "catppuccin",
@@ -58,14 +58,7 @@ return {
               readonly = '',
               unnamed = '[No Name]',
             }
-          },
-          {
-            "navic",
-            color = { fg = "#999999" },
-            cond = function()
-              return require("nvim-navic").is_available()
-            end,
-          },
+          }
         },
         lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
@@ -75,57 +68,61 @@ return {
         lualine_a = {},
         lualine_b = {},
         lualine_c = {'filename'},
-        lualine_x = {'location', 'filetype'},
+        lualine_x = {'location'},
         lualine_y = {},
         lualine_z = {}
       },
     },
   },
 
-  -- Navic
+  -- winbar
   {
     "SmiteshP/nvim-navic",
-    dependencies = { "neovim/nvim-lspconfig" },
-    lazy = true,
-    init = function()
-      vim.g.navic_silence = true
-    end,
+    dependencies = "neovim/nvim-lspconfig",
     opts = function()
       return {
-        icons = {
-          File = "󰈔",
-          Module = "󰆩",
-          Namespace = "󰅩",
-          Package = "󰏖",
-          Class = "󰠱",
-          Method = "󰆧",
-          Property = "󰜢",
-          Field = "󰜢",
-          Constructor = "",
-          Enum = " enum",
-          Interface = "󰜖",
-          Function = "󰊕",
-          Variable = "󰫧",
-          Constant = "󰏿",
-          String = "SC",
-          Number = "󰎠",
-          Boolean = "󰨙",
-          Array = "󰅪",
-          Object = "󰅫",
-          Key = " key",
-          Null = " null",
-          EnumMember = "󰭦",
-          Struct = "󰙅",
-          Event = "󰪄",
-          Operator = "󰭡",
-          TypeParameter = "󰊄",
+        lsp = {
+          auto_attach = true,
+          preference = nil,
         },
         highlight = true,
         separator = " > ",
-        depth_limit = 0,
-        icons_enabled = true,
-        clickable = true,
+        depth_limit = 5,
+        icons = require("util").icons.kind,
       }
+    end,
+    config = function(_, opts)
+      require("nvim-navic").setup(opts)
+      vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+    end,
+  },
+
+  -- scrollbar
+  {
+    "echasnovski/mini.map",
+    event = "VeryLazy",
+    config = function()
+      require("mini.map").setup({
+        -- Highlight integrations. Other integrations can be used (see `:h mini.map-integrations`).
+        integrations = {
+          require("mini.map").gen_integration.gitsigns(),
+          require("mini.map").gen_integration.builtin_search(),
+        },
+
+        -- Symbols used to display data. See `:h mini.map-symbols`.
+        symbols = {
+          encode = nil,
+          scroll_line = "█",
+        },
+
+        -- Window options. See `:h mini.map-window`.
+        window = {
+          focusable = false,
+          width = 20,
+          winblend = 15,
+          zindex = 10,
+        },
+      })
     end,
   },
   
@@ -194,302 +191,108 @@ return {
     },
   },
 
-  -- バッファライン
+  -- インデントライン
   {
-    "akinsho/bufferline.nvim",
+    "lukas-reineke/indent-blankline.nvim",
     event = "VeryLazy",
-    keys = {
-      {
-        "<leader>bp",
-        "<cmd>BufferLineTogglePin<cr>",
-        desc = "Toggle pin"
+    main = "ibl",
+    opts = {
+      indent = {
+        char = "│",
+        tab_char = "│",
       },
-      {
-        "<leader>bP",
-        "<cmd>BufferLineGroupClose ungrouped<cr>",
-        desc = "Delete non-pinned buffers"
-      },
-      {
-        "<leader>bo",
-        "<cmd>BufferLineCloseOthers<cr>",
-        desc = "Delete other buffers"
-      },
-      {
-        "<leader>bd",
-        "<cmd>BufferLineCloseRight<cr>",
-        desc = "Delete buffers to the right"
-      },
-      {
-        "<leader>bc",
-        "<cmd>BufferLineCloseLeft<cr>",
-        desc = "Delete buffers to the left"
-      },
-      {
-        "<Tab>",
-        "<cmd>BufferLineCycleNext<cr>",
-        desc = "Next buffer"
-      },
-      {
-        "<S-Tab>",
-        "<cmd>BufferLineCyclePrev<cr>",
-        desc = "Previous buffer"
+      scope = {
+        enabled = true,
+        show_start = true,
+        show_end = true,
       },
     },
+  },
+
+  -- バッファライン
+  {
+    'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
-        mode = "tabs",
-        separator_style = "slant",
-        always_show_bufferline = true,
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        color_icons = true,
+        mode = "buffers",
+        numbers = "ordinal",
         diagnostics = "nvim_lsp",
-        diagnostics_indicator = function(_, _, diagnostics_dict, _) 
-          local s = ""
+        diagnostics_indicator = function(count, level, diagnostics_dict, context)
+          local s = " "
           for e, n in pairs(diagnostics_dict) do
-            local icon = e == "error" and " " or (e == "warn" and " " or " ")
-            s = s .. icon .. n
+            local sym = e == "error" and " " or (e == "warning" and " " or " ")
+            s = s .. n .. sym
           end
           return s
         end,
-        offsets = { {
-          filetype = "NvimTree",
-          text = "File Explorer",
-          highlight = "Directory",
-          separator = true,
-        } },
-        hover = {
-          enabled = true,
-          delay = 200,
-          reveal = { "close" },
+        offsets = {
+          {
+            filetype = "NvimTree",
+            text = "File Explorer",
+            text_align = "center",
+            separator = true
+          }
         },
-        sort_by = "insert_after_current",
-      },
-    },
+        show_buffer_close_icons = true,
+        show_close_icon = true,
+        separator_style = "thin",
+      }
+    }
   },
 
-  -- ファイルエクスプローラー
-  {
-    "nvim-tree/nvim-tree.lua",
-    lazy = false,
-    keys = {
-      { "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "Toggle file explorer" },
-    },
-    opts = {
-      disable_netrw = true,
-      hijack_netrw = true,
-      open_on_setup = false,
-      ignore_ft_on_setup = {
-        "dashboard",
-        "startify",
-        "alpha",
-      },
-      auto_close = true,
-      sync_root_with_cwd = true,
-      update_focused_file = {
-        enable = true,
-        update_root = true,
-      },
-      view = {
-        width = 30,
-        side = "left",
-        preserve_window_proportions = false,
-        number = false,
-        relativenumber = false,
-        signcolumn = "yes",
-      },
-      renderer = {
-        group_empty = true,
-        highlight_git = true,
-        icons = {
-          git_placement = "before",
-          show = {
-            file = true,
-            folder = true,
-            folder_arrow = true,
-            git = true,
-          },
-          glyphs = {
-            default = "",
-            symlink = "",
-            folder = {
-              default = "",
-              open = "",
-              empty = "",
-              empty_open = "",
-              symlink = "",
-              symlink_open = "",
-            },
-            git = {
-              unstaged = "",
-              staged = "✓",
-              unmerged = "",
-              renamed = "➜",
-              untracked = "",
-              deleted = "",
-              ignored = "◌",
-            },
-          },
-        },
-      },
-      filters = {
-        dotfiles = false,
-        custom = { "node_modules", ".git" },
-      },
-      git = {
-        enable = true,
-        ignore = false,
-      },
-      actions = {
-        open_file = {
-          quit_on_open = true,
-          resize_window = true,
-          window_picker = {
-            enable = true,
-            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
-            exclude = {
-              filetype = { "notify", "terminal", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
-              buftype = { "nofile", "terminal", "help" },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  -- インデントスコープ
-  {
-    "echasnovski/mini.indentscope",
-    version = false,
-    opts = {
-      draw = {
-        delay = 0,
-        priority = 100,
-      },
-      options = {
-        try_as_border = true,
-      },
-    },
-  },
-
-  -- カラー表示
-  {
-    "NvChad/nvim-colorizer.lua",
-    event = "BufReadPost",
-    opts = {
-      user_default_options = {
-        RGB = true, -- #RGB
-        RRGGBB = true, -- #RRGGBB
-        names = false, -- Green
-        RRGGBBAA = true, -- #RRGGBBAA
-        AARRGGBB = true, -- 0xAARRGGBB
-        rgb_fn = true, -- CSS rgb(red, green, blue)
-        hsl_fn = true, -- CSS hsl(hue, saturation, lightness)
-        css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-        css_fn = true, -- Enable all CSS color functions: rgb_fn, hsl_fn
-        mode = "virtualtext", -- | background | virtualtext
-      },
-      color_filetypes = {
-        "css",
-        "scss",
-        "html",
-        "lua",
-        "javascript",
-        "typescript",
-        "tsx",
-        "json",
-      },
-    },
-  },
-
-  -- Noice.nvim
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      cmdline = {
-        view = "cmdline_popup",
-      },
-      messages = {
-        view = "popup",
-      },
-      popupmenu = {
-        enabled = false,
-      },
-      presets = {
-        bottom_search = true,
-        command_palette = true,
-        long_message_to_split = true,
-        inc_rename = false,
-        lsp_doc_border = false,
-      },
-    },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-  },
-
-  -- Which-key.nvim
+  -- キーマップヒント
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
     opts = {
       plugins = {
         marks = true,
         registers = true,
-        spelling = true,
-        presets = {
-          operators = false,
-          motions = false,
-          text_objects = false,
-          windows = true,
-          nav = true,
-          z = true,
-          g = true,
+        spelling = {
+          enabled = true,
+          suggestions = 20,
         },
       },
-      icons = {
-        breadcrumb = "»",
-        separator = "➜",
-        group = "+",
-      },
-      popup_mappings = {
-        scroll_down = "<c-d>",
-        scroll_up = "<c-u>",
-      },
-      window = {
+      win = {
         border = "rounded",
-        position = "bottom",
-        padding = { 2, 2, 2, 2 },
-        winhighlight = {"Normal:Normal", "FloatBorder:FloatBorder"},
+        padding = { 1, 2, 1, 2 },
       },
       layout = {
         height = { min = 4, max = 25 },
         width = { min = 20, max = 50 },
         spacing = 3,
-        align = "left",
-      },
-      hidden = {"<silent>", "<cmd>", "<Plug>", "<CR>", "call", "lua", "^:", "^ "},
-      show_help = true,
-      triggers = "auto",
-      triggers_blacklist = {
-        i = {"j", "k"},
-        v = {"j", "k"},
+        align = "center",
       },
     },
     config = function(_, opts)
-      local wk = require("which-key")
-      wk.setup(opts)
-      wk.register {
-        mode = "n",
-        ["<leader>"] = { name = "Leader" },
-        ["<localleader>"] = { name = "Local Leader" },
-      }
+      require("which-key").setup(opts)
     end,
+  },
+
+  -- UIコンポーネント
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+    opts = {
+      input = {
+        enabled = true,
+        default_prompt = "Input: ",
+        win_options = {
+          winblend = 10,
+        },
+      },
+      select = {
+        enabled = true,
+        backend = { "telescope", "fzf", "builtin" },
+        telescope = {
+          layout_config = {
+            height = 0.4,
+            width = 0.6,
+          },
+        },
+      },
+    },
   },
 }

@@ -22,7 +22,9 @@ function M.setup(capabilities)
         Lua = {
           hint = { enable = true, paramName = 'All', paramType = true },
           completion = { callSnippet = 'Replace' },
-          diagnostics = { globals = {'vim'} },
+          diagnostics = {
+            globals = { 'vim', 'use', 'describe', 'it', 'before_each', 'after_each' }
+          },
           workspace = {
             library = vim.api.nvim_get_runtime_file("", true),
             checkThirdParty = false,
@@ -30,6 +32,8 @@ function M.setup(capabilities)
         },
       },
     },
+    
+    
     
     ts_ls = {
       capabilities = capabilities,
@@ -74,6 +78,7 @@ function M.setup(capabilities)
     
     pyright = {
       capabilities = capabilities,
+      cmd = { "pyright-langserver", "--stdio" },
       settings = {
         python = {
           analysis = {
@@ -112,11 +117,11 @@ function M.setup(capabilities)
         original_on_attach(client, bufnr)
       end
     end
-    vim.lsp.start(vim.tbl_extend("force", { name = name }, config))
+    vim.lsp.config(name, config)
+    vim.lsp.enable(name)
   end
   
-  -- 共通のキーマップ設定
-  M.setup_keymaps()
+  
   
   -- 診断設定
   M.setup_diagnostics()

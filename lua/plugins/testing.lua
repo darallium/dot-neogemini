@@ -8,7 +8,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-python",
-      "nvim-neotest/neotest-rust",
+      
     },
     config = function(_, opts)
       ---@type NeotestOptions
@@ -17,7 +17,7 @@ return {
           require("neotest-python")({
             dap = { justMyCode = false },
           }),
-          require("neotest-rust"),
+          
         },
       }
       local neotest = require("neotest")
