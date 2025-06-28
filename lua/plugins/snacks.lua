@@ -27,14 +27,14 @@ return {
     opts = {
       dashboard = {
         enabled = true,
-        header = vim.split(string.rep("\n", 8) .. [[
+        header = vim.split(string.rep("\n", 8) .. [=[
            ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
            ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
            ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
            ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
            ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
-           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚══╝  ╚═╝╚═╝     ╚═╝
-]] .. "\n\n", "\n"),
+           ╚══════╝╚╚═╝  ╚═╝╚══════╝   ╚═╝     ╚══╝  ╚═╝╚═╝     ╚═╝
+]=], '\n'),
         items = {
           { desc = " Find file", key = "f", cmd = "Telescope find_files" },
           { desc = " New file", key = "n", cmd = "enew" },
@@ -47,7 +47,6 @@ return {
         },
         footer = function()
           local stats = require("lazy").stats()
-          if not stats then return {} end
           local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
           return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
         end,
@@ -70,6 +69,6 @@ return {
           once = true,
         })
       end
-    },
+    end,
   },
 }
