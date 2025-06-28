@@ -439,3 +439,19 @@ return {
   },
 }
 ```
+
+### Clojure
+```lua
+-- plugins/clojure.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "clojure", "clojurescript", "cljc", "edn" },
+    opts = {
+      servers = {
+        clojure_lsp = {},
+      },
+    },
+  },
+}
+```
