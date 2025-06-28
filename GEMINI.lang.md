@@ -161,3 +161,28 @@ return {
   },
 }
 ```
+
+### C/C++
+```lua
+-- plugins/c_cpp.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "c", "cpp" },
+    opts = {
+      servers = {
+        clangd = {
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+          },
+        },
+      },
+    },
+  },
+}
+```
