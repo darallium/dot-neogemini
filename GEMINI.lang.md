@@ -348,3 +348,19 @@ return {
   },
 }
 ```
+
+### R
+```lua
+-- plugins/r.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "r" },
+    opts = {
+      servers = {
+        r_language_server = {},
+      },
+    },
+  },
+}
+```
