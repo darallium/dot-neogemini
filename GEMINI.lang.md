@@ -440,30 +440,6 @@ return {
 }
 ```
 
-### Elixir
-```lua
--- plugins/elixir.lua
-return {
-  {
-    "neovim/nvim-lspconfig",
-    ft = { "elixir" },
-    opts = {
-      servers = {
-        elixir_ls = {
-          -- ElixirLS requires the cmd to be explicitly set.
-          -- You need to download and unzip ElixirLS, then provide the absolute path to `language_server.sh` (or `language_server.bat` on Windows).
-          -- Example: cmd = { "/path/to/elixir-ls/language_server.sh" },
-          cmd = { "YOUR_ABSOLUTE_PATH_TO_ELIXIR_LS/language_server.sh" },
-          root_dir = function(fname)
-            return vim.fs.find({'mix.exs'}, { upward = true, path = fname }):get(1)
-          end,
-        },
-      },
-    },
-  },
-}
-```
-
 ### Clojure
 ```lua
 -- plugins/clojure.lua
@@ -526,6 +502,28 @@ return {
         -- Add more configurations as needed
       }
     end,
+  },
+}
+```
+
+### Haskell
+```lua
+-- plugins/haskell.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "haskell", "lhaskell" },
+    opts = {
+      servers = {
+        hls = {
+          settings = {
+            haskell = {
+              formattingProvider = "fourmolu", -- or "ormolu", "stylish-haskell"
+            },
+          },
+        },
+      },
+    },
   },
 }
 ```
