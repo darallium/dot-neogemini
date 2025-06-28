@@ -24,6 +24,19 @@ return {
         },
         autotag = {
           enable = true,
+        },
+        ensure_installed = {
+          "css",
+          "html",
+          "javascript",
+          "latex",
+          "norg",
+          "scss",
+          "svelte",
+          "tsx",
+          "typst",
+          "vue",
+          "regex",
         }
       }
       configs.setup(ts_config)

@@ -25,7 +25,7 @@ lua/
 │   ├── telescope.lua   -- Telescope設定
 │   ├── colorscheme.lua -- カラースキーム
 │   ├── copilot.lua     -- GitHub Copilot
-│   ├── treesitter.lua  -- Treesitter
+    │   ├── treesitter.lua  -- Treesitter
 │   ├── dashboard.lua   -- Dashboard-nvim
 │   ├── git.lua         -- Git関連プラグイン
 │   └── ui.lua          -- UI強化プラグイン
