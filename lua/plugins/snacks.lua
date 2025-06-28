@@ -1,4 +1,4 @@
--- plugins/dashboard.lua
+-- plugins/snacks.lua
 return {
   {
     "folke/snacks.nvim",
@@ -23,7 +23,7 @@ return {
           header = vim.split(logo, "\n"),
           items = {
             { desc = " Find file", key = "f", cmd = "Telescope find_files" },
-            { desc = " New file", key = "n", cmd = "ene | startinsert" },
+            { desc = " New file", key = "n", cmd = "enew" },
             { desc = " Recent files", key = "r", cmd = "Telescope oldfiles" },
             { desc = " Find text", key = "g", cmd = "Telescope live_grep" },
             { desc = " Restore Session", key = "s", cmd = 'lua require("persistence").load()' },
@@ -37,6 +37,9 @@ return {
             local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
             return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
           end,
+        },
+        notifier = {
+          enabled = true,
         },
       }
     end,

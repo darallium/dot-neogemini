@@ -115,6 +115,11 @@ function M.setup(capabilities)
   end
 
   for name, config in pairs(servers) do
+    -- Skip rust_analyzer as it's handled by rustaceanvim
+    if name == "rust_analyzer" then
+      goto continue
+    end
+
     local original_on_attach = config.on_attach
     config.on_attach = function(client, bufnr)
       on_attach(client, bufnr)
@@ -124,6 +129,7 @@ function M.setup(capabilities)
     end
     vim.lsp.config(name, config)
     vim.lsp.enable(name)
+    ::continue::
   end
   
   

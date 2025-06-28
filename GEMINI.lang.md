@@ -364,3 +364,19 @@ return {
   },
 }
 ```
+
+### SQL
+```lua
+-- plugins/sql.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "sql" },
+    opts = {
+      servers = {
+        sqlls = {},
+      },
+    },
+  },
+}
+```
