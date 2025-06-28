@@ -300,3 +300,51 @@ return {
   },
 }
 ```
+
+### Markdown
+```lua
+-- plugins/markdown.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "markdown" },
+    opts = {
+      servers = {
+        marksman = {},
+      },
+    },
+  },
+}
+```
+
+### Shell Script
+```lua
+-- plugins/shell.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "sh" },
+    opts = {
+      servers = {
+        bashls = {},
+      },
+    },
+  },
+}
+```
+
+### Perl
+```lua
+-- plugins/perl.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "perl" },
+    opts = {
+      servers = {
+        perlls = {},
+      },
+    },
+  },
+}
+```
