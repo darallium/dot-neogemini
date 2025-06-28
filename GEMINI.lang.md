@@ -186,3 +186,19 @@ return {
   },
 }
 ```
+
+### PHP
+```lua
+-- plugins/php.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "php" },
+    opts = {
+      servers = {
+        intelephense = {},
+      },
+    },
+  },
+}
+```
