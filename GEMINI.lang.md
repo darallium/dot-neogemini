@@ -527,3 +527,59 @@ return {
   },
 }
 ```
+
+### Scala
+```lua
+-- plugins/scala.lua
+return {
+  {
+    "scalameta/nvim-metals",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required by nvim-metals
+    },
+    ft = { "scala", "sbt", "java" }, -- File types for which this plugin will be loaded
+    opts = function()
+      local metals_config = require("metals").bare_config()
+
+      -- You can customize your on_attach function here.
+      -- This function is called when the LSP client attaches to a buffer.
+      -- It's a good place to set up buffer-local keymaps for LSP functionalities.
+      metals_config.on_attach = function(client, bufnr)
+        -- Example: Set up common LSP keymaps if not already handled globally
+        -- You might already have these in core/lsp.lua, so adjust as needed.
+        local key = vim.keymap.set
+        key('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Go to definition' })
+        key('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Go to declaration' })
+        key('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Go to implementation' })
+        key('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Show references' })
+        key('n', 'K', vim.lsp.buf.hover, { buffer = bufnr, desc = 'Show hover' })
+        key('n', '<leader>rn', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Rename symbol' })
+        key('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code action' })
+        key('n', '<leader>f', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format buffer' })
+
+        -- Metals-specific commands (optional, but recommended for full features)
+        -- You can map these to your preferred keybindings
+        key('n', '<leader>ms', function() require("metals").status() end, { buffer = bufnr, desc = 'Metals Status' })
+        key('n', '<leader>mr', function() require("metals").restart_server() end, { buffer = bufnr, desc = 'Metals Restart Server' })
+        key('n', '<leader>md', function() require("metals").toggle_doctor_visibility() end, { buffer = bufnr, desc = 'Metals Doctor' })
+        key('n', '<leader>mm', function() require("metals").build_import() end, { buffer = bufnr, desc = 'Metals Build Import' })
+        key('n', '<leader>mc', function() require("metals").clean_workspace() end, { buffer = bufnr, desc = 'Metals Clean Workspace' })
+        key('n', '<leader>mt', function() require("metals").run_current_test() end, { buffer = bufnr, desc = 'Metals Run Current Test' })
+        key('n', '<leader>mta', function() require("metals").run_all_tests() end, { buffer = bufnr, desc = 'Metals Run All Tests' })
+      end
+
+      return metals_config
+    end,
+    config = function(self, metals_config)
+      local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = self.ft,
+        callback = function()
+          require("metals").initialize_or_attach(metals_config)
+        end,
+        group = nvim_metals_group,
+      })
+    end,
+  },
+}
+```
