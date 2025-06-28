@@ -1,3 +1,22 @@
+---@class AvanteBehaviourOpts
+---@field auto_suggestions boolean
+---@field auto_set_highlight_group boolean
+---@field auto_set_keymaps boolean
+---@field auto_apply_diff_after_generation boolean
+---@field support_paste_from_clipboard boolean
+---@field minimize_diff boolean
+
+---@class AvanteWindowsOpts
+---@field position string
+---@field wrap boolean
+---@field width integer
+
+---@class AvantePluginOpts
+---@field provider string
+---@field auto_suggestions_provider string
+---@field behaviour AvanteBehaviourOpts
+---@field windows AvanteWindowsOpts
+
 -- AI-assisted development plugins
 return {
   -- Tabby
@@ -38,6 +57,7 @@ return {
     "yetone/avante.nvim",
     event = "VeryLazy",
     version = false,
+    ---@type AvantePluginOpts
     opts = {
       provider = "copilot",
       auto_suggestions_provider = "copilot",
@@ -89,6 +109,16 @@ return {
       "stevearc/dressing.nvim",
       "nvim-tree/nvim-web-devicons",
     },
+    ---@class CodeCompanionGeminiAdapterOpts
+    ---@field adapter table
+    ---@field api_key string
+
+    ---@class CodeCompanionAdaptersOpts
+    ---@field gemini CodeCompanionGeminiAdapterOpts
+
+    ---@class CodeCompanionPluginOpts
+    ---@field adapters CodeCompanionAdaptersOpts
+    ---@type CodeCompanionPluginOpts
     opts = {
       adapters = {
         gemini = {

@@ -1,8 +1,35 @@
+---@class RustAnalyzerCargoSettings
+---@field allFeatures boolean
+---@field loadOutDirsFromCheck boolean
+---@field runBuildScripts boolean
+
+---@class RustAnalyzerCheckOnSaveSettings
+---@field allFeatures boolean
+---@field command string
+---@field extraArgs string[]
+
+---@class RustAnalyzerProcMacroSettings
+---@field enable boolean
+---@field ignored table<string, string[]>
+
+---@class RustAnalyzerSettings
+---@field cargo RustAnalyzerCargoSettings
+---@field checkOnSave RustAnalyzerCheckOnSaveSettings
+---@field procMacro RustAnalyzerProcMacroSettings
+
+---@class RustaceanvimServerOpts
+---@field on_attach fun(client: vim.lsp.Client, bufnr: integer)
+---@field settings table<string, RustAnalyzerSettings>
+
+---@class RustaceanvimPluginOpts
+---@field server RustaceanvimServerOpts
+
 -- plugins/rust.lua
 return {
   {
     "mrcjkb/rustaceanvim",
     ft = { "rust" },
+    ---@type RustaceanvimPluginOpts
     opts = {
       server = {
         on_attach = function(client, bufnr)

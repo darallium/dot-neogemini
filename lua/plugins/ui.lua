@@ -34,10 +34,30 @@ return {
     end,
   },
   
+  ---@class LualineOptions
+---@field theme string
+---@field component_separators table
+---@field section_separators table
+---@field globalstatus boolean
+
+---@class LualineSection
+---@field lualine_a table
+---@field lualine_b table
+---@field lualine_c table
+---@field lualine_x table
+---@field lualine_y table
+---@field lualine_z table
+
+---@class LualinePluginOpts
+---@field options LualineOptions
+---@field sections LualineSection
+---@field inactive_sections LualineSection
+
   -- ステータスライン
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
+    ---@type LualinePluginOpts
     opts = {
       options = {
         theme = "catppuccin",
@@ -74,10 +94,22 @@ return {
     },
   },
 
+  ---@class NavicLspOpts
+---@field auto_attach boolean
+---@field preference any
+
+---@class NavicPluginOpts
+---@field lsp NavicLspOpts
+---@field highlight boolean
+---@field separator string
+---@field depth_limit integer
+---@field icons table
+
   -- winbar
   {
     "SmiteshP/nvim-navic",
     dependencies = "neovim/nvim-lspconfig",
+    ---@type NavicPluginOpts
     opts = function()
       return {
         lsp = {
@@ -96,10 +128,30 @@ return {
     end,
   },
 
+  ---@class MiniMapIntegrations
+---@field gitsigns table
+---@field builtin_search table
+
+---@class MiniMapSymbols
+---@field encode any
+---@field scroll_line string
+
+---@class MiniMapWindow
+---@field focusable boolean
+---@field width integer
+---@field winblend integer
+---@field zindex integer
+
+---@class MiniMapPluginOpts
+---@field integrations MiniMapIntegrations
+---@field symbols MiniMapSymbols
+---@field window MiniMapWindow
+
   -- scrollbar
   {
     "echasnovski/mini.map",
     event = "VeryLazy",
+    ---@type MiniMapPluginOpts
     config = function()
       require("mini.map").setup({
         -- Highlight integrations. Other integrations can be used (see `:h mini.map-integrations`).
@@ -125,6 +177,12 @@ return {
     end,
   },
   
+  ---@class NvimNotifyPluginOpts
+---@field timeout integer
+---@field max_height fun(): integer
+---@field max_width fun(): integer
+---@field on_open fun(win: integer)
+
   -- 通知
   {
     "rcarriga/nvim-notify",
@@ -137,6 +195,7 @@ return {
         desc = "Dismiss all Notifications",
       },
     },
+    ---@type NvimNotifyPluginOpts
     opts = {
       timeout = 3000,
       max_height = function()
@@ -155,6 +214,34 @@ return {
     end,
   },
   
+  ---@class FineCmdlineCmdlineOpts
+---@field enable_keymaps boolean
+---@field smart_history boolean
+---@field prompt string
+
+---@class FineCmdlinePopupPosition
+---@field row string
+---@field col string
+
+---@class FineCmdlinePopupSize
+---@field width string
+
+---@class FineCmdlinePopupBorder
+---@field style string
+
+---@class FineCmdlinePopupWinOptions
+---@field winhighlight string
+
+---@class FineCmdlinePopupOpts
+---@field position FineCmdlinePopupPosition
+---@field size FineCmdlinePopupSize
+---@field border FineCmdlinePopupBorder
+---@field win_options FineCmdlinePopupWinOptions
+
+---@class FineCmdlinePluginOpts
+---@field cmdline FineCmdlineCmdlineOpts
+---@field popup FineCmdlinePopupOpts
+
   -- フローティングコマンドライン
   {
     "VonHeikemen/fine-cmdline.nvim",
@@ -162,6 +249,7 @@ return {
       { ":", "<cmd>FineCmdline<CR>", desc = "Fine cmdline" },
     },
     dependencies = { "MunifTanjim/nui.nvim" },
+    ---@type FineCmdlinePluginOpts
     opts = {
       cmdline = {
         enable_keymaps = true,
@@ -186,11 +274,25 @@ return {
     },
   },
 
+  ---@class IndentBlanklineIndentOpts
+---@field char string
+---@field tab_char string
+
+---@class IndentBlanklineScopeOpts
+---@field enabled boolean
+---@field show_start boolean
+---@field show_end boolean
+
+---@class IndentBlanklinePluginOpts
+---@field indent IndentBlanklineIndentOpts
+---@field scope IndentBlanklineScopeOpts
+
   -- インデントライン
   {
     "lukas-reineke/indent-blankline.nvim",
     event = "VeryLazy",
     main = "ibl",
+    ---@type IndentBlanklinePluginOpts
     opts = {
       indent = {
         char = "│",
@@ -204,11 +306,37 @@ return {
     },
   },
 
+  ---@class BufferlineDiagnosticsIndicator
+---@field count integer
+---@field level string
+---@field diagnostics_dict table
+---@field context table
+
+---@class BufferlineOffset
+---@field filetype string
+---@field text string
+---@field text_align string
+---@field separator boolean
+
+---@class BufferlineOptions
+---@field mode string
+---@field numbers string
+---@field diagnostics string
+---@field diagnostics_indicator fun(count: integer, level: string, diagnostics_dict: table, context: table): string
+---@field offsets BufferlineOffset[]
+---@field show_buffer_close_icons boolean
+---@field show_close_icon boolean
+---@field separator_style string
+
+---@class BufferlinePluginOpts
+---@field options BufferlineOptions
+
   -- バッファライン
   {
     'akinsho/bufferline.nvim',
     event = 'VeryLazy',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
+    ---@type BufferlinePluginOpts
     opts = {
       options = {
         mode = "buffers",
@@ -237,10 +365,35 @@ return {
     }
   },
 
+  ---@class WhichKeySpellingOpts
+---@field enabled boolean
+---@field suggestions integer
+
+---@class WhichKeyPluginsOpts
+---@field marks boolean
+---@field registers boolean
+---@field spelling WhichKeySpellingOpts
+
+---@class WhichKeyWinOpts
+---@field border string
+---@field padding table
+
+---@class WhichKeyLayoutOpts
+---@field height table
+---@field width table
+---@field spacing integer
+---@field align string
+
+---@class WhichKeyPluginOpts
+---@field plugins WhichKeyPluginsOpts
+---@field win WhichKeyWinOpts
+---@field layout WhichKeyLayoutOpts
+
   -- キーマップヒント
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    ---@type WhichKeyPluginOpts
     opts = {
       plugins = {
         marks = true,
@@ -266,10 +419,28 @@ return {
     end,
   },
 
+  ---@class DressingInputOpts
+---@field enabled boolean
+---@field default_prompt string
+---@field win_options table
+
+---@class DressingSelectTelescopeOpts
+---@field layout_config table
+
+---@class DressingSelectOpts
+---@field enabled boolean
+---@field backend string[]
+---@field telescope DressingSelectTelescopeOpts
+
+---@class DressingPluginOpts
+---@field input DressingInputOpts
+---@field select DressingSelectOpts
+
   -- UIコンポーネント
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
+    ---@type DressingPluginOpts
     opts = {
       input = {
         enabled = true,

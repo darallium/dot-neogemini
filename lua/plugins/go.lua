@@ -1,3 +1,5 @@
+---@class GoPluginOpts
+
 return {
   {
     "ray-x/go.nvim",
@@ -6,6 +8,7 @@ return {
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
     },
+    ---@type GoPluginOpts
     config = function()
       require("go").setup()
     end,

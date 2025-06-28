@@ -1,4 +1,24 @@
 
+---@class DapAdapterExecutable
+---@field command string
+---@field args string[]
+
+---@class DapAdapter
+---@field type string
+---@field command? string
+---@field args? string[]
+---@field port? string
+---@field executable? DapAdapterExecutable
+
+---@class DapConfiguration
+---@field type string
+---@field request string
+---@field name string
+---@field program? string | fun(): string
+---@field pythonPath? fun(): string
+---@field cwd? string
+---@field stopOnEntry? boolean
+
 -- Debugging setup using nvim-dap
 return {
   {
@@ -36,16 +56,14 @@ return {
       local dapui = require("dapui")
 
       -- Adapters
-      -- Python
+      ---@type table<string, DapAdapter>
       dap.adapters.python = {
         type = 'executable',
         command = 'python',
         args = { '-m', 'debugpy.adapter' },
       }
 
-      
-
-      -- Rust
+      ---@type table<string, DapAdapter>
       dap.adapters.codelldb = {
         type = 'server',
         port = "${port}",
@@ -56,7 +74,7 @@ return {
       }
 
       -- Configurations
-      -- Python
+      ---@type table<string, DapConfiguration[]>
       dap.configurations.python = {
         {
           type = 'python',
@@ -69,9 +87,7 @@ return {
         },
       }
 
-      
-      
-      -- Rust
+      ---@type table<string, DapConfiguration[]>
       dap.configurations.rust = {
         {
           name = "Launch file",

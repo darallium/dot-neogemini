@@ -1,8 +1,11 @@
+---@class PyrightPluginOpts
+
 -- plugins/python.lua
 return {
   {
     "microsoft/pyright",
     ft = "python",
+    ---@type PyrightPluginOpts
     config = function()
       -- Rye環境検出
       local function get_python_path()

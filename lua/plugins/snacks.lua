@@ -1,3 +1,21 @@
+---@class SnacksDashboardItem
+---@field desc string
+---@field key string
+---@field cmd string
+
+---@class SnacksDashboardOpts
+---@field enabled boolean
+---@field header string[]
+---@field items SnacksDashboardItem[]
+---@field footer fun(): string[]
+
+---@class SnacksNotifierOpts
+---@field enabled boolean
+
+---@class SnacksPluginOpts
+---@field dashboard SnacksDashboardOpts
+---@field notifier SnacksNotifierOpts
+
 -- plugins/snacks.lua
 return {
   {
@@ -5,44 +23,39 @@ return {
     event = "VimEnter",
     lazy = false,
     priority = 1000,
-    opts = function()
-      local logo = [[
+    ---@type SnacksPluginOpts
+    opts = {
+      dashboard = {
+        enabled = true,
+        header = vim.split(string.rep("\n", 8) .. [[
            ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
            ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
            ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
            ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
            ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
-           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
-      ]]
-
-      logo = string.rep("\n", 8) .. logo .. "\n\n"
-
-      return {
-        dashboard = {
-          enabled = true,
-          header = vim.split(logo, "\n"),
-          items = {
-            { desc = " Find file", key = "f", cmd = "Telescope find_files" },
-            { desc = " New file", key = "n", cmd = "enew" },
-            { desc = " Recent files", key = "r", cmd = "Telescope oldfiles" },
-            { desc = " Find text", key = "g", cmd = "Telescope live_grep" },
-            { desc = " Restore Session", key = "s", cmd = 'lua require("persistence").load()' },
-            { desc = " Lazy Extras", key = "x", cmd = "LazyExtras" },
-            { desc = " Lazy", key = "l", cmd = "Lazy" },
-            { desc = " Quit", key = "q", cmd = "qa" },
-          },
-          footer = function()
-            local stats = require("lazy").stats()
-            if not stats then return {} end
-            local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-            return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
-          end,
+           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚══╝  ╚═╝╚═╝     ╚═╝
+]] .. "\n\n", "\n"),
+        items = {
+          { desc = " Find file", key = "f", cmd = "Telescope find_files" },
+          { desc = " New file", key = "n", cmd = "enew" },
+          { desc = " Recent files", key = "r", cmd = "Telescope oldfiles" },
+          { desc = " Find text", key = "g", cmd = "Telescope live_grep" },
+          { desc = " Restore Session", key = "s", cmd = 'lua require("persistence").load()' },
+          { desc = " Lazy Extras", key = "x", cmd = "LazyExtras" },
+          { desc = " Lazy", key = "l", cmd = "Lazy" },
+          { desc = " Quit", key = "q", cmd = "qa" },
         },
-        notifier = {
-          enabled = true,
-        },
-      }
-    end,
+        footer = function()
+          local stats = require("lazy").stats()
+          if not stats then return {} end
+          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+          return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+        end,
+      },
+      notifier = {
+        enabled = true,
+      },
+    },
     config = function(_, opts)
       require("snacks").setup(opts)
 
@@ -57,6 +70,6 @@ return {
           once = true,
         })
       end
-    end,
+    },
   },
 }

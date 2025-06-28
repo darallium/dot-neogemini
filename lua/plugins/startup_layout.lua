@@ -1,4 +1,32 @@
 
+---@class NeoTreeFilteredItems
+---@field visible boolean
+---@field hide_dotfiles boolean
+---@field hide_git_ignored boolean
+---@field hide_hidden boolean
+
+---@class NeoTreeFollowCurrentFile
+---@field enabled boolean
+---@field leave_open boolean
+
+---@class NeoTreeFilesystem
+---@field filtered_items NeoTreeFilteredItems
+---@field follow_current_file NeoTreeFollowCurrentFile
+
+---@class NeoTreeMappingOptions
+---@field noremap boolean
+---@field nowait boolean
+
+---@class NeoTreeWindow
+---@field width integer
+---@field position string
+---@field mapping_options NeoTreeMappingOptions
+
+---@class NeoTreePluginOpts
+---@field close_if_last_window boolean
+---@field filesystem NeoTreeFilesystem
+---@field window NeoTreeWindow
+
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -9,6 +37,7 @@ return {
       "MunifTanjim/nui.nvim",
     },
     cmd = "Neotree",
+    ---@type NeoTreePluginOpts
     opts = {
       close_if_last_window = true,
       filesystem = {
@@ -39,9 +68,9 @@ return {
     cmd = "NvimTreeToggle",
   },
   {
-    "startup.nvim",
-    dependencies = { "nvim-tree/nvim-tree.lua", "nvim-neo-tree/neo-tree.nvim" },
-    config = function()
+    "startup-nvim/startup.nvim",
+    event = "VimEnter",
+    opts = function()
       local function open_default_layout()
         -- Check if Neo-tree is available and preferred
         if pcall(require, "neo-tree") then

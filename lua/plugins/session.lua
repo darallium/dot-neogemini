@@ -1,8 +1,13 @@
+---@class PersistenceOptions
+---@field dir string
+---@field options string[]
+
 -- Session management
 return {
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
+    ---@type PersistenceOptions
     opts = {
       dir = vim.fn.stdpath("data") .. "/sessions/",
       options = { "buffers", "curdir", "tabpages", "winsize", "help", "globals" },

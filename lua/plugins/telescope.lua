@@ -1,3 +1,39 @@
+---@class TelescopeLayoutConfigHorizontal
+---@field prompt_position string
+---@field preview_width number
+---@field results_width number
+
+---@class TelescopeLayoutConfigVertical
+---@field mirror boolean
+
+---@class TelescopeLayoutConfig
+---@field horizontal TelescopeLayoutConfigHorizontal
+---@field vertical TelescopeLayoutConfigVertical
+---@field width number
+---@field height number
+---@field preview_cutoff number
+
+---@class TelescopeMappings
+---@field n table
+
+---@class TelescopeDefaultsOpts
+---@field prompt_prefix string
+---@field selection_caret string
+---@field path_display string[]
+---@field sorting_strategy string
+---@field layout_config TelescopeLayoutConfig
+---@field mappings TelescopeMappings
+
+---@class TelescopeFindFilesPicker
+---@field find_command string[]
+
+---@class TelescopePickers
+---@field find_files TelescopeFindFilesPicker
+
+---@class TelescopePluginOpts
+---@field defaults TelescopeDefaultsOpts
+---@field pickers TelescopePickers
+
 -- plugins/telescope.lua
 return {
   {
@@ -37,6 +73,7 @@ return {
       { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git Status" },
       { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
     },
+    ---@type TelescopePluginOpts
     opts = function()
       return {
         defaults = {

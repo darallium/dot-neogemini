@@ -1,3 +1,24 @@
+---@class LazyPerformanceCache
+---@field enabled boolean
+
+---@class LazyPerformanceRtp
+
+---@class LazyPerformance
+---@field cache LazyPerformanceCache
+---@field rtp LazyPerformanceRtp
+
+---@class LazyDefaults
+---@field lazy boolean
+
+---@class LazyRocks
+---@field enabled boolean
+
+---@class LazySetupOpts
+---@field defaults LazyDefaults
+---@field performance LazyPerformance
+---@field rocks LazyRocks
+---@field lockfile string
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -16,9 +37,9 @@ require("core")
 
 --require("keymap")
 
+---@type LazySetupOpts
 require("lazy").setup({
-  "plugins",
-  "plugins.startup_layout",
+  { import = "plugins" },
 }, {
   defaults = {
     lazy = true,

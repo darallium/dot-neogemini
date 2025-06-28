@@ -1,3 +1,13 @@
+---@class NeotestPythonAdapterOpts
+---@field dap table
+
+---@class NeotestAdapter
+---@field name string
+---@field config table
+
+---@class NeotestOptions
+---@field adapters NeotestAdapter[]
+
 -- Testing integration using neotest
 return {
   {

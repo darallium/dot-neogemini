@@ -1,3 +1,7 @@
+---@class JdtlsConfig
+---@field cmd string[]
+---@field root_dir string
+
 return {
   {
     'mfussenegger/nvim-jdtls',
@@ -14,6 +18,7 @@ return {
         return
       end
 
+      ---@type JdtlsConfig
       local jdtls_config = {
         cmd = {'jdtls'},
         root_dir = root_dir,

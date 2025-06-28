@@ -1,3 +1,40 @@
+---@class CmpSnippetConfig
+---@field expand fun(args: { body: string })
+
+---@class CmpWindowConfig
+---@field completion table
+---@field documentation table
+
+---@class CmpMappingConfig
+---@field ['<C-b>'] fun()
+---@field ['<C-f>'] fun()
+---@field ['<C-Space>'] fun()
+---@field ['<C-e>'] fun()
+---@field ['<CR>'] fun()
+---@field ['<Tab>'] fun(fallback: fun())
+---@field ['<S-Tab>'] fun(fallback: fun())
+
+---@class CmpSourceConfig
+---@field name string
+
+---@class CmpFormatEntry
+---@field entry table
+---@field vim_item table
+
+---@class CmpFormattingConfig
+---@field format fun(entry: CmpFormatEntry, vim_item: table): table
+
+---@class CmpExperimentalConfig
+---@field ghost_text boolean
+
+---@class CmpConfig
+---@field snippet CmpSnippetConfig
+---@field window CmpWindowConfig
+---@field mapping CmpMappingConfig
+---@field sources CmpSourceConfig[]
+---@field formatting CmpFormattingConfig
+---@field experimental CmpExperimentalConfig
+
 return {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
@@ -17,6 +54,7 @@ return {
 
     require("luasnip.loaders.from_vscode").lazy_load()
 
+    ---@type CmpConfig
     cmp.setup({
       snippet = {
         expand = function(args)
