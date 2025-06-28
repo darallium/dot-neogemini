@@ -12,6 +12,8 @@ return {
       
       -- Prevent nvim-lspconfig from setting up rust_analyzer, as rustaceanvim handles it.
       require("lspconfig").configs.rust_analyzer = nil
+      
+      require("lspconfig").configs.jsonls = nil
 
       -- Neovim 0.11+の場合は新API使用
       if vim.fn.has('nvim-0.11') == 1 then

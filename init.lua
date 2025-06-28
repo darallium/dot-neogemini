@@ -54,12 +54,17 @@ require("lazy").setup({
   },
   rocks = {
     enabled = false,
+    hererocks = false,
   },
   lockfile = vim.fn.stdpath("config") .. "/.lazy-lock.json",
 })
 
 
 vim.notify('Neovim configuration loaded successfully!', vim.log.levels.INFO)
+
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
 
 return 'hello'
 
