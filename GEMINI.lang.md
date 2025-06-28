@@ -218,3 +218,19 @@ return {
   },
 }
 ```
+
+### C#
+```lua
+-- plugins/csharp.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "csharp" },
+    opts = {
+      servers = {
+        omnisharp = {},
+      },
+    },
+  },
+}
+```
