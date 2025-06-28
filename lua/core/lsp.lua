@@ -61,21 +61,6 @@ function M.setup(capabilities)
       end,
     },
     
-    rust_analyzer = {
-      capabilities = capabilities,
-      settings = {
-        ["rust-analyzer"] = {
-          cargo = { allFeatures = true },
-          checkOnSave = { command = "clippy" },
-          inlayHints = {
-            chainingHints = { enable = true },
-            parameterHints = { enable = true },
-            typeHints = { enable = true },
-          },
-        },
-      },
-    },
-    
     pyright = {
       capabilities = capabilities,
       settings = {

@@ -38,7 +38,6 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       options = {
         theme = "catppuccin",
@@ -160,11 +159,7 @@ return {
   {
     "VonHeikemen/fine-cmdline.nvim",
     keys = {
-      {
-        ":",
-        "<cmd>FineCmdline<CR>",
-        desc = "Fine cmdline"
-      },
+      { ":", "<cmd>FineCmdline<CR>", desc = "Fine cmdline" },
     },
     dependencies = { "MunifTanjim/nui.nvim" },
     opts = {

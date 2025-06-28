@@ -234,3 +234,19 @@ return {
   },
 }
 ```
+
+### Kotlin
+```lua
+-- plugins/kotlin.lua
+return {
+  {
+    "neovim/nvim-lspconfig",
+    ft = { "kotlin" },
+    opts = {
+      servers = {
+        kotlin_language_server = {},
+      },
+    },
+  },
+}
+```
