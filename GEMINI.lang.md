@@ -413,16 +413,27 @@ return {
 }
 ```
 
-### TOML
+### Swift
 ```lua
--- plugins/toml.lua
+-- plugins/swift.lua
 return {
   {
     "neovim/nvim-lspconfig",
-    ft = { "toml" },
+    ft = { "swift", "c", "cpp", "objective-c", "objective-cpp" },
     opts = {
       servers = {
-        taplo = {},
+        sourcekit = {
+          -- SourceKit-LSP relies on didChangeWatchedFiles, but Neovim doesn't implement dynamic registration.
+          -- Manually enable it in capabilities.
+          capabilities = {
+            textDocument = {
+              didChangeWatchedFiles = {
+                dynamicRegistration = false,
+              },
+            },
+          },
+          root_markers = { "Package.swift", ".git" },
+        },
       },
     },
   },
